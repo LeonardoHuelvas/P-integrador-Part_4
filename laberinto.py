@@ -1,46 +1,46 @@
 from typing import List, Tuple
+import os
+from readchar import readkey, key
 
 def convertir_mapa_a_matriz(laberinto: str) -> List[List[str]]:
     return [list(fila) for fila in laberinto.split("\n")]
 
-import os
-movimiento = input("Muevete (w =↑ / a =← / s =↓ / d =→): ")
 def mostrar_mapa(mapa: List[List[str]]):
-    os.system('cls' if os.name == 'nt' else 'clear')  # Limpia la pantalla
+    os.system('cls' if os.name == 'nt' else 'clear')  # Limpiar la pantalla  con cls y clear
     for fila in mapa:
         print(''.join(fila))
 
 def main_loop(mapa: List[List[str]], inicio: Tuple[int, int], fin: Tuple[int, int]):
     px, py = inicio
-    mapa[px][py] = 'P'  # Colocar al jugador en la posición inicial
+    mapa[px][py] = 'P'  # Colocamos al jugador en la posición inicial
 
     while (px, py) != fin:
         mostrar_mapa(mapa)
-        print("Muevete (w = ↑ / a = ← / s = ↓ / d = →): ", end='')
-        movimiento = input()
+        print("Llegaste al Final : ", end='')
 
-        # Calcular nueva posición basada en el movimiento
+        movimiento = readkey()
+
+        # Calculamos la  nueva posición basada en el movimiento
         nueva_px, nueva_py = px, py
-        if movimiento == 'w':
+        if movimiento == key.UP:
             nueva_px -= 1
-        elif movimiento == 's':
+        elif movimiento == key.DOWN:
             nueva_px += 1
-        elif movimiento == 'a':
+        elif movimiento == key.LEFT:
             nueva_py -= 1
-        elif movimiento == 'd':
+        elif movimiento == key.RIGHT:
             nueva_py += 1
 
-        # Verificar si la nueva posición es válida
+        # Verificamos si la nueva posición es válida
         if 0 <= nueva_px < len(mapa) and 0 <= nueva_py < len(mapa[0]) and mapa[nueva_px][nueva_py] != '#':
             mapa[px][py] = '.'  # Restaurar la posición anterior
             px, py = nueva_px, nueva_py  # Actualizar la posición del jugador
             mapa[px][py] = 'P'  # Mover al jugador a la nueva posición
 
-
 # laberinto
 laberinto = """..###################
 ....#...............#
-#.#.#####.#########.#
+#.#.#####.#########.#s
 #.#...........#.#.#.#
 #.#####.#.###.#.#.#.#
 #...#.#.#.#.....#...#
